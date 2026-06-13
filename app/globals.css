@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ───────────────────────────────────────────────
+   Base document styles
+   ─────────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+  /* Offset anchored scrolling so sections aren't hidden behind the sticky nav */
+  scroll-padding-top: 5rem;
+}
+
+body {
+  @apply bg-white text-navy font-sans antialiased;
+}
+
+/* Reusable layout + component classes */
+@layer components {
+  .container-px {
+    @apply mx-auto w-full max-w-6xl px-5 sm:px-8;
+  }
+
+  /* Neon-pink primary call-to-action button */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-pink px-6 py-3
+           text-sm font-semibold text-white shadow-soft transition
+           hover:bg-pink-dark hover:-translate-y-0.5 focus:outline-none
+           focus-visible:ring-2 focus-visible:ring-pink-dark focus-visible:ring-offset-2;
+  }
+
+  /* Navy outline / secondary button */
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border-2 border-navy
+           bg-white px-6 py-3 text-sm font-semibold text-navy transition
+           hover:bg-navy hover:text-white focus:outline-none
+           focus-visible:ring-2 focus-visible:ring-navy focus-visible:ring-offset-2;
+  }
+
+  /* Section eyebrow label */
+  .eyebrow {
+    @apply text-sm font-semibold uppercase tracking-[0.2em] text-pink-dark;
+  }
+
+  /* Cursive highlight heading (mimics the logo) */
+  .heading-cursive {
+    @apply font-cursive text-navy;
+  }
+}
