@@ -2,7 +2,6 @@ import { business } from "@/lib/site-data";
 import {
   FacebookIcon,
   InstagramIcon,
-  GlobeIcon,
   MapPinIcon,
 } from "./icons";
 
@@ -19,6 +18,9 @@ export default function Footer() {
         {/* Brand */}
         <div>
           <p className="heading-cursive text-4xl text-white">Harry&apos;s</p>
+          <p className="mt-4 text-xs font-semibold uppercase leading-none tracking-[0.3em] text-white/70">
+            Coffee Shop
+          </p>
           <p className="mt-3 max-w-xs text-sm text-white/70">
             Family run coffee shop in Burghfield Common. Specialty coffee,
             banging breakfasts and good vibes.
@@ -27,22 +29,22 @@ export default function Footer() {
 
         {/* Address */}
         <div>
-          <h4 className="text-sm font-semibold uppercase tracking-widest text-pink">
+          <h4 className="text-sm font-semibold uppercase tracking-widest text-pink-300">
             Find Us
           </h4>
           <p className="mt-4 flex items-start gap-3 text-sm text-white/80">
-            <MapPinIcon className="mt-0.5 h-5 w-5 shrink-0 text-pink" />
+            <MapPinIcon className="mt-0.5 h-5 w-5 shrink-0 text-pink-300" />
             <span>{business.address.full}</span>
           </p>
           <a
             href={`mailto:${business.email}`}
-            className="mt-3 block text-sm text-white/80 transition hover:text-pink"
+            className="mt-3 block text-sm text-white/80 transition hover:text-pink-300"
           >
             {business.email}
           </a>
           <a
             href={`tel:${business.phoneHref}`}
-            className="mt-1 block text-sm text-white/80 transition hover:text-pink"
+            className="mt-1 block text-sm text-white/80 transition hover:text-pink-300"
           >
             {business.phone}
           </a>
@@ -50,7 +52,7 @@ export default function Footer() {
 
         {/* Social */}
         <div>
-          <h4 className="text-sm font-semibold uppercase tracking-widest text-pink">
+          <h4 className="text-sm font-semibold uppercase tracking-widest text-pink-300">
             Follow Along
           </h4>
           <div className="mt-4 flex gap-3">
@@ -59,7 +61,7 @@ export default function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Facebook"
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 transition hover:bg-pink"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 transition hover:bg-pink-600"
             >
               <FacebookIcon className="h-5 w-5" />
             </a>
@@ -68,18 +70,9 @@ export default function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Instagram"
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 transition hover:bg-pink"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 transition hover:bg-pink-600"
             >
               <InstagramIcon className="h-5 w-5" />
-            </a>
-            <a
-              href={business.socials.website}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Website"
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 transition hover:bg-pink"
-            >
-              <GlobeIcon className="h-5 w-5" />
             </a>
           </div>
         </div>

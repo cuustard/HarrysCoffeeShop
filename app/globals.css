@@ -15,6 +15,21 @@ body {
   @apply bg-white text-navy font-sans antialiased;
 }
 
+/* Respect users who prefer reduced motion: kill animations, transitions
+   and smooth scrolling without affecting the visual design for everyone else. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 /* Reusable layout + component classes */
 @layer components {
   .container-px {
@@ -23,23 +38,15 @@ body {
 
   /* Neon-pink primary call-to-action button */
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full bg-pink px-6 py-3
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-pink-600 px-6 py-3
            text-sm font-semibold text-white shadow-soft transition
-           hover:bg-pink-dark hover:-translate-y-0.5 focus:outline-none
-           focus-visible:ring-2 focus-visible:ring-pink-dark focus-visible:ring-offset-2;
+           hover:bg-pink-700 hover:-translate-y-0.5 focus:outline-none
+           focus-visible:ring-2 focus-visible:ring-pink-700 focus-visible:ring-offset-2;
   }
 
-  /* Navy outline / secondary button */
-  .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full border-2 border-navy
-           bg-white px-6 py-3 text-sm font-semibold text-navy transition
-           hover:bg-navy hover:text-white focus:outline-none
-           focus-visible:ring-2 focus-visible:ring-navy focus-visible:ring-offset-2;
-  }
-
-  /* Section eyebrow label */
+  /* Section eyebrow label (pink-700 for solid AA contrast on blush + white) */
   .eyebrow {
-    @apply text-sm font-semibold uppercase tracking-[0.2em] text-pink-dark;
+    @apply text-sm font-semibold uppercase tracking-[0.2em] text-pink-700;
   }
 
   /* Cursive highlight heading (mimics the logo) */

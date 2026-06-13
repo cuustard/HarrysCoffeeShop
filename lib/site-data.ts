@@ -11,23 +11,43 @@ export const business = {
   tagline: "Your Local Community Hub in Burghfield Common.",
   blurb:
     "Family run coffee shop serving the best specialty coffee, banging breakfasts, and good vibes.",
+
+  // Canonical site URL — used for metadata, Open Graph, sitemap & robots.
+  // Update this to the final production domain before launch.
+  url: "https://harryscoffeeshop.co.uk",
+
   address: {
-    line1: "Glendale House",
-    line2: "Reading Road, Burghfield",
+    line1: "Reading Rd",
+    line2: "Burghfield Common, Reading",
     postcode: "RG7 3BL",
-    full: "Glendale House, Reading Road, Burghfield, RG7 3BL",
+    full: "Reading Rd, Burghfield Common, Reading RG7 3BL",
+    // Broken-out parts for schema.org PostalAddress (local SEO).
+    street: "Reading Rd",
+    locality: "Burghfield Common",
+    region: "Reading",
+    country: "GB",
   },
   email: "thefamilyblend@hotmail.com",
-  // Placeholder — swap in the shop's real number.
-  phone: "0118 000 0000",
-  phoneHref: "+441180000000",
+  phone: "07576 093893",
+  phoneHref: "+447576093893",
+
+  // Coordinates from Harry's verified Google listing (used for schema geo).
+  geo: { latitude: 51.40072627178916, longitude: -1.0561631226469759 },
+  priceRange: "£1–10",
+  placeId: "ChIJK6fcyYCfdkgRiFLyvDLrYxs",
+
   socials: {
-    facebook: "https://www.facebook.com/",
-    instagram: "https://www.instagram.com/",
+    facebook: "https://www.facebook.com/harrysburghfield/",
+    instagram: "https://www.instagram.com/harrys_coffee_shop/",
     website: "https://harryscoffeeshop.co.uk",
   },
-  // Used for the "Write a Google Review" button and the map embed.
-  googleReviewUrl: "https://www.google.com/maps",
+
+  // Used for the "Write a Google Review" button.
+  googleReviewUrl:
+    "https://search.google.com/local/writereview?placeid=ChIJK6fcyYCfdkgRiFLyvDLrYxs",
+  // Direct link to the verified Maps listing (used in schema hasMap).
+  googleMapsUrl:
+    "https://www.google.com/maps/place/?q=place_id:ChIJK6fcyYCfdkgRiFLyvDLrYxs",
 };
 
 /** Menu snapshot — a sample, not the full list. */
@@ -95,9 +115,24 @@ export const reviews: {
     text: "Absolutely fantastic coffee here! The desserts and cakes are always amazing too. Great service and lovely staff. My dog loves it in here too — doggy friendly and treats for her. My favourite place to grab lunch.",
   },
   {
-    name: "The Morning Regular",
-    meta: "Local visitor",
-    text: "Best hot chocolate for miles and the atmosphere is so cosy. The floral wall and neon sign make it the perfect spot for a catch-up. The team always remember my order — proper community feel.",
+    name: "Rachel C",
+    meta: "Local Guide · 34 reviews · 13 photos",
+    text: "First visit and I was super impressed. Had a sandwich and cake and both were delicious. Will be back!",
+  },
+  {
+    name: "Mike",
+    meta: "Local Guide · 103 reviews · 734 photos",
+    text: "What a rather exquisite way to spend the afternoon, drinking delicious coffee and eating a delightful sausage and bacon roll. Even the dog got some treats and a puppuccino!",
+  },
+  {
+    name: "Lisa Hewitt",
+    meta: "Local Guide · 32 reviews · 6 photos",
+    text: "What a find!! Hidden little gem. Love it — fresh, tasty, gorgeous food. Amazing hot chocolates and smoothies. Staff always so kind and nice.",
+  },
+  {
+    name: "Julie Evans",
+    meta: "5 reviews",
+    text: "Just visited for a take away lunch — we had the fajita bowls with halloumi which were really lovely with just the right amount of dressing. I also had a tea with oat milk, and it was perfect! The best lunch I've had out in a very long time. Definitely worth a visit!",
   },
 ];
 
@@ -113,11 +148,11 @@ export const openingHours: {
   open: string | null;
   close: string | null;
 }[] = [
-  { day: "Monday", weekday: 1, open: "08:00", close: "16:00" },
+  { day: "Monday", weekday: 1, open: null, close: null },
   { day: "Tuesday", weekday: 2, open: "08:00", close: "16:00" },
   { day: "Wednesday", weekday: 3, open: "08:00", close: "16:00" },
   { day: "Thursday", weekday: 4, open: "08:00", close: "16:00" },
   { day: "Friday", weekday: 5, open: "08:00", close: "16:00" },
-  { day: "Saturday", weekday: 6, open: "09:00", close: "16:00" },
-  { day: "Sunday", weekday: 0, open: "09:00", close: "14:00" },
+  { day: "Saturday", weekday: 6, open: "09:00", close: "15:00" },
+  { day: "Sunday", weekday: 0, open: "09:00", close: "15:00" },
 ];

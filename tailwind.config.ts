@@ -20,11 +20,8 @@ const config: Config = {
         // Primary text / nav / footer — matches the navy storefront
         navy: "#1E3A8A",
 
-        // Call-to-action / accents — matches the neon sign & floral wall
-        pink: {
-          DEFAULT: "#EC4899",
-          dark: "#DB2777",
-        },
+        // Call-to-action / accents — keep Tailwind's built-in pink scale
+        // so pink-600 (#db2777) and pink-700 (#be185d) resolve correctly.
 
         // Used sparingly for warmth — the wooden tables
         brown: "#4A3728",

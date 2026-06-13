@@ -18,10 +18,13 @@ export default function Navbar() {
         {/* Cursive text logo (Deep Navy) */}
         <a
           href="#top"
-          className="heading-cursive text-3xl leading-none"
-          aria-label={`Harry's Coffee Shop — back to top`}
+          className="flex flex-col leading-none"
+          aria-label="Harry's Coffee Shop — back to top"
         >
-          Harry&apos;s
+          <span className="heading-cursive text-3xl">Harry&apos;s</span>
+          <span className="mt-3 text-[0.6rem] font-semibold uppercase leading-none tracking-[0.3em] text-navy/80">
+            Coffee Shop
+          </span>
         </a>
 
         {/* Desktop links */}
@@ -30,7 +33,7 @@ export default function Navbar() {
             <a
               key={link.href}
               href={link.href}
-              className="text-sm font-semibold text-navy transition hover:text-pink-dark"
+              className="text-sm font-semibold text-navy transition hover:text-pink-600"
             >
               {link.label}
             </a>

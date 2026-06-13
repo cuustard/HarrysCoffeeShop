@@ -117,13 +117,13 @@ export default function OpeningHours() {
     <div className="rounded-3xl bg-white p-7 shadow-soft">
       <div className="flex items-center justify-between gap-4">
         <h3 className="flex items-center gap-2 text-lg font-bold text-navy">
-          <ClockIcon className="h-5 w-5 text-pink-dark" />
+          <ClockIcon className="h-5 w-5 text-pink-600" />
           Opening Hours
         </h3>
 
         {/* Dynamic OPEN / CLOSED badge */}
         {status === null ? (
-          <span className="inline-flex items-center gap-2 rounded-full bg-navy/5 px-3 py-1.5 text-xs font-semibold text-navy/50">
+          <span className="inline-flex items-center gap-2 rounded-full bg-navy/5 px-3 py-1.5 text-xs font-semibold text-navy/80">
             Checking…
           </span>
         ) : status.isOpen ? (
@@ -144,7 +144,7 @@ export default function OpeningHours() {
 
       {/* Sub-status line (e.g. "Closes at 4pm") */}
       {status && (
-        <p className="mt-1 text-sm text-navy/60">{status.message}</p>
+        <p className="mt-1 text-sm text-navy/80">{status.message}</p>
       )}
 
       {/* Week list — today's row is highlighted */}
@@ -161,7 +161,7 @@ export default function OpeningHours() {
               <span>
                 {d.day}
                 {isToday && (
-                  <span className="ml-2 text-xs font-medium text-pink-dark">
+                  <span className="ml-2 text-xs font-medium text-pink-700">
                     Today
                   </span>
                 )}

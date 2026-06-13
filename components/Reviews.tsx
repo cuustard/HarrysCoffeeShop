@@ -1,9 +1,15 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { reviews, business } from "@/lib/site-data";
 import { StarIcon } from "./icons";
 
+// How many of the (all 5-star) reviews to show at once.
+const DISPLAY_COUNT = 4;
+
 function StarRating() {
   return (
-    <div className="flex gap-0.5 text-pink" aria-label="5 out of 5 stars">
+    <div className="flex gap-0.5 text-pink-600" aria-label="5 out of 5 stars">
       {Array.from({ length: 5 }).map((_, i) => (
         <StarIcon key={i} className="h-5 w-5" />
       ))}
@@ -13,20 +19,39 @@ function StarRating() {
 
 /*
  * WHAT LOCALS SAY — grid of customer reviews.
+ * Shows a rotating subset of the full pool: the server renders a stable first
+ * `DISPLAY_COUNT` (so the HTML is consistent + crawlable), then on mount we
+ * pick a random selection so the reviews change on each visit/refresh.
  */
 export default function Reviews() {
+  const [shown, setShown] = useState(() => reviews.slice(0, DISPLAY_COUNT));
+
+  useEffect(() => {
+    const shuffled = [...reviews]
+      .sort(() => Math.random() - 0.5)
+      .slice(0, DISPLAY_COUNT);
+    setShown(shuffled);
+  }, []);
+
   return (
-    <section id="reviews" className="bg-white py-20 sm:py-28">
+    <section
+      id="reviews"
+      aria-labelledby="reviews-heading"
+      className="bg-white pt-14 pb-20 sm:pt-16 sm:pb-28"
+    >
       <div className="container-px">
         <div className="mx-auto max-w-2xl text-center">
-          <p className="eyebrow">96% recommend · 35 reviews</p>
-          <h2 className="mt-3 text-3xl font-extrabold sm:text-4xl">
-            What the <span className="heading-cursive text-4xl text-pink-dark sm:text-5xl">Locals</span> Say
+          <div className="eyebrow flex flex-col items-center justify-center gap-1">
+            <span>★ 4.5 on Google · 60 reviews</span>
+            <span>96% recommend on Facebook · 35 reviews</span>
+          </div>
+          <h2 id="reviews-heading" className="mt-3 text-3xl font-extrabold sm:text-4xl">
+            What the <span className="heading-cursive text-4xl text-pink-600 sm:text-5xl">Locals</span> Say
           </h2>
         </div>
 
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-2">
-          {reviews.map((review) => (
+        <div className="mt-12 grid gap-6 sm:grid-cols-2">
+          {shown.map((review) => (
             <figure
               key={review.name}
               className="flex flex-col rounded-3xl border border-blush bg-blush/40 p-7 shadow-soft"
@@ -47,7 +72,7 @@ export default function Reviews() {
                   <span className="block font-bold text-navy">
                     {review.name}
                   </span>
-                  <span className="block text-xs text-navy/60">
+                  <span className="block text-xs text-navy/80">
                     {review.meta}
                   </span>
                 </span>
