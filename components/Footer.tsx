@@ -1,9 +1,5 @@
 import { business } from "@/lib/site-data";
-import {
-  FacebookIcon,
-  InstagramIcon,
-  MapPinIcon,
-} from "./icons";
+import { FacebookIcon, InstagramIcon, MapPinIcon } from "./icons";
 
 /*
  * FOOTER — Deep Navy background, white text.
@@ -83,7 +79,7 @@ export default function Footer() {
         <div className="container-px flex flex-col items-center justify-between gap-2 py-6 text-center text-xs text-white/60 sm:flex-row sm:text-left">
           <p>© {year} Harry&apos;s Coffee Shop. All rights reserved.</p>
           {/* Replace [Your Name] with your name/agency before launch. */}
-          <p>Local site build by [Your Name].</p>
+          <p>Local site build by Jake Evans.</p>
         </div>
       </div>
     </footer>
