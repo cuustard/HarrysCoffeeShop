@@ -32,11 +32,15 @@ export default function StructuredData() {
       hasMenuItem: section.items.map((item) => ({
         "@type": "MenuItem",
         name: item.name,
-        offers: {
-          "@type": "Offer",
-          price: item.price.replace(/[£\s]/g, ""),
-          priceCurrency: "GBP",
-        },
+        // Some items have no fixed price (e.g. "See board") or are modifiers
+        // priced "+£x.xx" — only emit a valid Offer when a price is present.
+        ...(item.price && {
+          offers: {
+            "@type": "Offer",
+            price: item.price.replace(/[£+\s]/g, ""),
+            priceCurrency: "GBP",
+          },
+        }),
       })),
     })),
   };

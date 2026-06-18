@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { reviews, business } from "@/lib/site-data";
 import { StarIcon } from "./icons";
+import ViewTracker from "./ViewTracker";
 
 // How many of the (all 5-star) reviews to show at once.
 const DISPLAY_COUNT = 4;
@@ -39,6 +40,9 @@ export default function Reviews() {
       aria-labelledby="reviews-heading"
       className="bg-white pt-14 pb-20 sm:pt-16 sm:pb-28"
     >
+      {/* First-party analytics: logs a Supabase view when this section is seen. */}
+      <ViewTracker section="reviews" />
+
       <div className="container-px">
         <div className="mx-auto max-w-2xl text-center">
           <div className="eyebrow flex flex-col items-center justify-center gap-1">

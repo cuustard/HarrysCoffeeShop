@@ -21,6 +21,7 @@ export default function About() {
               src="https://images.unsplash.com/photo-1559925393-8be0ec4767c8?auto=format&fit=crop&w=1200&q=80"
               alt="The team behind Harry's Coffee Shop in front of the floral wall"
               fill
+              priority
               sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-cover"
             />

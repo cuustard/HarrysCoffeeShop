@@ -50,45 +50,189 @@ export const business = {
     "https://www.google.com/maps/place/?q=place_id:ChIJK6fcyYCfdkgRiFLyvDLrYxs",
 };
 
-/** Menu snapshot — a sample, not the full list. */
-export const menu: {
+export type MenuItem = {
+  name: string;
+  // Null for items with no fixed price (e.g. "see display cabinet").
+  price?: string | null;
+  description?: string;
+  // Optional extras line, e.g. "Add bacon £1.50 · Add halloumi £1.50".
+  addOns?: string;
+};
+
+export type MenuCategory = {
   category: string;
-  items: { name: string; price: string }[];
-}[] = [
+  // Section-wide price note shown by the heading, e.g. "+65p" for syrups.
+  priceNote?: string;
+  items: MenuItem[];
+};
+
+export const menu: MenuCategory[] = [
   {
-    category: "Specialty Coffee",
+    category: "Our Famous Coffee",
     items: [
-      { name: "Flat White", price: "£3.40" },
-      { name: "Cappuccino", price: "£3.40" },
-      { name: "Mocha", price: "£3.95" },
-      { name: "Deluxe Hot Chocolate", price: "£4.20" },
+      { name: "Americano", price: "£3.20" },
+      { name: "Espresso", price: "£2.80" },
+      { name: "Double Espresso", price: "£3.00" },
+      { name: "Flat White", price: "£3.75" },
+      { name: "Latte", price: "£3.95" },
+      { name: "Cappuccino", price: "£3.95" },
+      { name: "Caffe Mocha", price: "£3.95" },
+      { name: "Iced Latte", price: "£4.50" },
     ],
   },
   {
-    category: "Banging Breakfasts",
+    category: "Syrups",
+    priceNote: "+65p",
     items: [
-      { name: "The Family Fry-Up", price: "£8.95" },
-      { name: "Eggs & Avocado on Sourdough", price: "£7.50" },
-      { name: "Bacon or Sausage Bap", price: "£4.50" },
-      { name: "Breakfast Crepe", price: "£6.50" },
+      { name: "Vanilla" },
+      { name: "Gingerbread" },
+      { name: "Hazelnut" },
+      { name: "Caramel" },
+      { name: "Salted Caramel" },
+      { name: "Pumpkin" },
+      { name: "Cinnamon" },
+      { name: "Chai" },
     ],
   },
   {
-    category: "Lunch",
+    category: "Dairy Free",
+    priceNote: "+50p",
     items: [
-      { name: "Peri Chicken Toastie", price: "£6.50" },
-      { name: "Caesar Salad Wrap", price: "£6.00" },
-      { name: "Soup of the Day", price: "£5.50" },
-      { name: "Sausage Roll", price: "£3.50" },
+      { name: "Almond / Soya" },
+      { name: "Oat / Coconut" },
     ],
   },
   {
-    category: "Weekend Treats",
+    category: "Tea",
     items: [
-      { name: "Fresh Crepes", price: "£7.00" },
-      { name: "Cornflake Malteser Rocky Road", price: "£3.50" },
-      { name: "Brownie", price: "£3.00" },
-      { name: "Cake of the Week", price: "£3.95" },
+      { name: "Yorkshire Tea", price: "£2.60" },
+      { name: "Yorkshire Decaf", price: "£2.60" },
+      { name: "Earl Grey", price: "£3.00" },
+      { name: "Turmeric", price: "£3.00" },
+      { name: "Lemon", price: "£3.00" },
+      { name: "Green", price: "£3.00" },
+      { name: "Peppermint", price: "£3.00" },
+      { name: "Camomile", price: "£3.00" },
+      { name: "Jasmine", price: "£3.00" },
+      { name: "Berry", price: "£3.00" },
+    ],
+  },
+  {
+    category: "Hot Chocolate",
+    items: [
+      { name: "Hot Chocolate", price: "£3.95" },
+      {
+        name: "Deluxe Hot Chocolate",
+        price: "£4.20",
+        description: "Served with whipped cream & marshmallows",
+      },
+      { name: "Baby Hot Chocolate", price: "£3.75" },
+      { name: "Babycino", price: "£1.50" },
+      { name: "Puppycino", price: "£1.50" },
+    ],
+  },
+  {
+    category: "Iced Tea",
+    items: [
+      {
+        name: "Iced Tea",
+        price: "£3.95",
+        description: "Raspberry, Peach or Passion Fruit flavour",
+      },
+    ],
+  },
+  {
+    category: "Smoothies",
+    items: [
+      { name: "Raspberry Heaven", price: "£5.25", description: "Apple, raspberry, mango & blueberry" },
+      { name: "Green Reviver", price: "£5.25", description: "Banana, kale, mango & blueberry" },
+      { name: "Acai Kick", price: "£5.25", description: "Strawberry, mango, blueberry & acai" },
+      { name: "Passion Storm", price: "£5.25", description: "Peach, pineapple, papaya, passionfruit juice, guava puree & aloe vera juice" },
+      { name: "Dazzling Dragon", price: "£5.25", description: "Dragon fruit, mango, banana, apple & wild blueberry" },
+      { name: "Matcha Power", price: "£5.25", description: "Pineapple, banana, apple, spinach & matcha powder" },
+    ],
+  },
+  {
+    category: "Milkshakes",
+    items: [
+      { name: "Cookies and Cream", price: "£5.50" },
+      { name: "Banana Fudge", price: "£5.50" },
+      { name: "Strawberry", price: "£5.50" },
+      { name: "Salted Caramel", price: "£5.50" },
+      { name: "Vanilla", price: "£5.50" },
+      { name: "Chocolate Chip", price: "£5.50" },
+    ],
+  },
+  {
+    category: "Breakfast & Brunch",
+    items: [
+      {
+        name: "Breakfast Bap — Sausage & Bacon",
+        price: "£8.00",
+        description: "White or brioche roll, served with ketchup or brown sauce",
+      },
+      {
+        name: "Breakfast Bap — Sausage or Bacon",
+        price: "£7.00",
+        description: "White or brioche roll, served with ketchup or brown sauce",
+      },
+      { name: "Bacon and Brie Croissant", price: "£6.25" },
+      {
+        name: "Smashed Avocado on Toast",
+        price: "£6.50",
+        description: "Sourdough toast topped with smashed avocado, salt & pepper and a sprinkle of red pepper flakes for a bit of heat",
+        addOns: "Add bacon £1.50 · Add halloumi £1.50",
+      },
+      {
+        name: "Granola Pot",
+        price: "£3.75",
+        description: "Strawberry compote topped with natural greek yoghurt & super berry granola",
+      },
+      { name: "All Butter Croissant", price: "£3.50", description: "Served with jam and butter" },
+      { name: "Almond Croissant", price: "£3.95", description: "Served warm" },
+      { name: "Cinnamon Bun", price: "£3.95", description: "Served warm" },
+      { name: "Toasted Teacake", price: "£3.50", description: "Served with jam and butter" },
+    ],
+  },
+  {
+    category: "Bagels",
+    items: [
+      { name: "The Maple One", price: "£7.00", description: "Smashed avocado, lemon juice & bacon brushed with maple syrup" },
+      { name: "The Fresh One", price: "£7.00", description: "Smashed avocado, lemon juice, sundried tomatoes & creamy buffalo mozzarella" },
+      { name: "The Ocean One", price: "£7.75", description: "Smoked salmon, cream cheese, lemon juice & rocket" },
+      { name: "The Med One", price: "£7.00", description: "Creamy buffalo mozzarella, pesto & fresh tomato" },
+    ],
+  },
+  {
+    category: "Soup of the Day",
+    items: [
+      {
+        name: "Soup of the Day",
+        price: "£5.00",
+        description: "Served with crusty bread and butter — ask your server for today's soup",
+      },
+    ],
+  },
+  {
+    category: "Kids Meal Deal",
+    items: [
+      {
+        name: "Kids Meal Deal",
+        price: "£5.95",
+        description: "Cheese or ham sandwich, portion of fruit, soft drink and a treat (cookies or choc bar). Swap the treat for a cake for £2 extra",
+      },
+    ],
+  },
+  {
+    category: "Pastries",
+    items: [
+      { name: "Pastries Selection", description: "We have a selection of pastries available each day" },
+    ],
+  },
+  {
+    category: "Freshly Baked Cakes & Tray Bakes",
+    items: [
+      { name: "Display Cabinet Selection", description: "Check out our display cabinet for this week's selection" },
     ],
   },
 ];
