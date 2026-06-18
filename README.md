@@ -1,7 +1,8 @@
 # Harry's Coffee Shop — Website
 
 A single-page, fully responsive marketing site for **Harry's Coffee Shop**, Burghfield Common.
-Built with **Next.js 14** (App Router) + **Tailwind CSS**, ready to deploy on **Vercel's free tier**.
+Built with **Next.js 16** (App Router) + **React 19** + **Tailwind CSS**, deployed to
+**Cloudflare Workers** via the [`@opennextjs/cloudflare`](https://opennext.js.org/cloudflare) adapter.
 
 > Aesthetic: _Instagrammable Floral Village Cafe_ — Crisp White & Soft Blush
 > backgrounds, Deep Navy text/nav/footer, Neon Pink accents, and a playful
@@ -18,22 +19,100 @@ npm run dev
 
 Then open **http://localhost:3000**.
 
-To check the production build locally:
+To check the **production** build on the real Cloudflare `workerd` runtime
+(not a plain Node server), use the parity preview — see
+[Deployment](#️-deployment--cloudflare-workers-opennextjscloudflare) below:
 
 ```bash
-npm run build
-npm run start
+npm run dev:preview
 ```
 
 ---
 
-## ☁️ Deploy to Vercel
+## ☁️ Deployment — Cloudflare Workers (`@opennextjs/cloudflare`)
 
-1. Push this folder to a new **GitHub** repository.
-2. Go to [vercel.com/new](https://vercel.com/new), import the repo.
-3. Vercel auto-detects Next.js — just click **Deploy**. No env vars needed.
+This project deploys to **Cloudflare Workers** via the OpenNext adapter (not
+Vercel, and not Cloudflare *Pages* — see the note at the bottom). The build must
+use **webpack**, not Turbopack (`next build --webpack`), because the adapter's
+webpack output is what `workerd` loads reliably.
 
-Every `git push` to `main` redeploys automatically.
+### Scripts
+
+| Script | What it does |
+| ------ | ------------ |
+| `npm run dev` | Fast local dev (native Next.js + HMR) → http://localhost:3000 |
+| `npm run clean` | Purge `.next`, `.open-next`, `.wrangler` (cross-platform, zero-dep) |
+| `npm run build:clean` | `clean` → full Cloudflare worker build (webpack) |
+| `npm run dev:preview` | `build:clean` → run on the **local `workerd`** runtime for production parity |
+| `npm run deploy:prod` | `build:clean` → deploy to Cloudflare Workers |
+
+> **Why every CF script cleans first:** `opennextjs-cloudflare deploy` and
+> `preview` do **not** build — they act on whatever is already in `.open-next/`.
+> Always rebuilding from a clean slate is what prevents stale "Frankenstein"
+> bundles (the `ComponentMod.handler is not a function` / `ChunkLoadError` 500s).
+> Stop any running `npm run dev` before `clean`/`deploy:prod` so Windows doesn't
+> lock `.next`.
+
+### ✅ Pre-flight checklist (run before `npm run deploy:prod`)
+
+1. **Git is clean & correct branch** — `git status` shows no stray changes; you're on `main`.
+2. **Right Cloudflare account** — `npx wrangler whoami`.
+3. **Production secrets exist on the Worker** — `npx wrangler secret list`
+   → expect `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`.
+   (Set/rotate with `npx wrangler secret put <NAME>`.)
+4. **Local runtime parity smoke test** — `npm run dev:preview`, open the
+   `workerd` URL Wrangler prints (http://localhost:8787), click through Menu &
+   Reviews, and confirm no errors in `npx wrangler tail`.
+5. **Confirm it's a webpack build** — the build log says webpack and
+   `.next/server/webpack-runtime.js` exists (no `[turbopack]_runtime.js`).
+6. **Deploy** — `npm run deploy:prod`.
+7. **Post-deploy verification** — `npx wrangler tail` while loading the live URL:
+   expect `200`s, and confirm a row lands in the Supabase `website_interactions`
+   table when you scroll the Menu/Reviews sections.
+
+### 🔐 Local vs Production configuration (Supabase)
+
+**Use two separate Supabase projects** — e.g. `harrys-dev` and `harrys-prod` —
+so a local mistake can never read or write the production database. Keys are
+stored in **three physically separate places**, and local files always point at
+the **dev** project:
+
+| Context | Command | Where keys come from | Points at |
+| ------- | ------- | -------------------- | --------- |
+| Native dev | `npm run dev` | `.env.local` | **dev** Supabase |
+| Local `workerd` preview | `npm run dev:preview` | `.dev.vars` | **dev** Supabase |
+| Production | `npm run deploy:prod` | `wrangler secret put` (encrypted on the Worker) | **prod** Supabase |
+
+```ini
+# .env.local      → used by `npm run dev`        (GITIGNORED)
+# .dev.vars       → used by `npm run dev:preview` (GITIGNORED)
+SUPABASE_URL=https://harrys-dev.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=<DEV service-role key>
+```
+
+```bash
+# Production keys — never in a file, only on the Worker:
+npx wrangler secret put SUPABASE_URL                # → https://harrys-prod.supabase.co
+npx wrangler secret put SUPABASE_SERVICE_ROLE_KEY   # → PROD service-role key
+```
+
+> **Rules of thumb**
+> - The `service_role` key bypasses Row Level Security — it is **server-only**.
+>   Never prefix it with `NEXT_PUBLIC_`, never commit it, never expose it to the client.
+> - `npm run dev` reads `.env.local`; `wrangler dev` (used by `dev:preview`)
+>   reads `.dev.vars`. They're different files — keep **both**, both with **dev** keys.
+> - Both files are already covered by [`.gitignore`](.gitignore).
+
+> **Windows note:** `npm run dev:preview` runs the real `workerd` runtime via
+> `wrangler dev`. If it misbehaves on native Windows (path quirks), fall back to
+> `npm run dev` for logic and deploy to a **separate staging Worker** for true
+> runtime parity rather than fighting the local emulator.
+
+### Toward "as seamless as Vercel"
+
+For push-to-deploy automation, connect the repo to **Workers Builds** (Cloudflare's
+native Git CI) or add a GitHub Action that runs `npm run deploy:prod` on push to
+`main`. Per-PR preview URLs are available via `wrangler versions upload`.
 
 ---
 
