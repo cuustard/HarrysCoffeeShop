@@ -108,6 +108,31 @@ npx wrangler secret put SUPABASE_SERVICE_ROLE_KEY   # → PROD service-role key
 > `npm run dev` for logic and deploy to a **separate staging Worker** for true
 > runtime parity rather than fighting the local emulator.
 
+### 📊 First-party analytics
+
+Section views (Menu, Reviews) are logged with the native browser
+**IntersectionObserver** → a **Server Action** ([`app/actions.ts`](app/actions.ts))
+→ Supabase. No third-party trackers, no cookies. A view is logged **at most once
+per section per tab session**, and only after the section dwells in view ~1s
+(see [`components/ViewTracker.tsx`](components/ViewTracker.tsx)).
+
+Create the table once per Supabase project (dev **and** prod):
+
+```sql
+create table if not exists website_interactions (
+  id          bigint generated always as identity primary key,
+  section     text        not null,              -- 'menu' | 'reviews'
+  event_type  text        not null default 'view',
+  session_id  uuid,                              -- per-tab session: uniques & funnels
+  created_at  timestamptz not null default now()
+);
+create index if not exists idx_wi_section_created
+  on website_interactions (section, created_at desc);
+```
+
+`created_at` is set by Postgres (never trusted from the client). `session_id`
+is a client-generated UUID, validated server-side before insert.
+
 ### Toward "as seamless as Vercel"
 
 For push-to-deploy automation, connect the repo to **Workers Builds** (Cloudflare's

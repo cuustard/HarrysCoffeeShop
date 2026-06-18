@@ -14,9 +14,13 @@
  *   id          bigint generated always as identity primary key
  *   section     text        not null              -- 'menu' | 'reviews'
  *   event_type  text        not null default 'view'
+ *   session_id  uuid                              -- per-tab session (for uniques/funnels)
  *   created_at  timestamptz not null default now()
  *
- * Required env (set in the Cloudflare Pages project — never commit these):
+ *   create index if not exists idx_wi_section_created
+ *     on website_interactions (section, created_at desc);
+ *
+ * Required env (set as Worker secrets — never commit these):
  *   SUPABASE_URL                e.g. https://xxxxxxxx.supabase.co
  *   SUPABASE_SERVICE_ROLE_KEY   server-only service-role key (bypasses RLS for inserts)
  */
@@ -29,7 +33,16 @@ const ALLOWED_SECTIONS: ReadonlySet<TrackedSection> = new Set([
   "reviews",
 ]);
 
-export async function logSectionView(section: TrackedSection): Promise<void> {
+// How long we'll wait on Supabase before giving up, so a hung request never
+// ties up the worker invocation (or the client's action request).
+const INSERT_TIMEOUT_MS = 3000;
+
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+export async function logSectionView(
+  section: TrackedSection,
+  sessionId?: string,
+): Promise<void> {
   if (!ALLOWED_SECTIONS.has(section)) return;
 
   const baseUrl = process.env.SUPABASE_URL;
@@ -38,8 +51,11 @@ export async function logSectionView(section: TrackedSection): Promise<void> {
   // Misconfigured env → silently no-op rather than throwing in production.
   if (!baseUrl || !serviceKey) return;
 
+  // Only accept a well-formed UUID; ignore anything else (never trust the client).
+  const session_id = sessionId && UUID_RE.test(sessionId) ? sessionId : null;
+
   try {
-    await fetch(`${baseUrl}/rest/v1/website_interactions`, {
+    const res = await fetch(`${baseUrl}/rest/v1/website_interactions`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -48,9 +64,17 @@ export async function logSectionView(section: TrackedSection): Promise<void> {
         // Don't ask PostgREST to echo the inserted row back — we don't need it.
         Prefer: "return=minimal",
       },
-      body: JSON.stringify({ section, event_type: "view" }),
+      body: JSON.stringify({ section, event_type: "view", session_id }),
+      signal: AbortSignal.timeout(INSERT_TIMEOUT_MS),
     });
+
+    if (!res.ok) {
+      // Visible in `wrangler tail` for debugging; never surfaced to the user.
+      console.warn(
+        `analytics insert failed: ${res.status} ${await res.text()}`,
+      );
+    }
   } catch {
-    // Analytics must never break the page — swallow any network/DB error.
+    // Analytics must never break the page — swallow any network/DB/timeout error.
   }
 }
