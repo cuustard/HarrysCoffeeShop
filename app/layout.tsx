@@ -3,6 +3,8 @@ import { Inter, Pacifico } from "next/font/google";
 import "./globals.css";
 import { business } from "@/lib/site-data";
 import StructuredData from "@/components/StructuredData";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 // Clean sans-serif for body text.
 const inter = Inter({
@@ -115,7 +117,9 @@ export default function RootLayout({
           Skip to content
         </a>
         <StructuredData />
-        {children}
+        <Navbar />
+        <main id="main-content">{children}</main>
+        <Footer />
       </body>
     </html>
   );

@@ -1,12 +1,22 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 
+/*
+ * Nav links are root-relative so they work from *any* page:
+ *  - "/menu" is a real route (its own page)
+ *  - "/#about" etc. jump to a section on the home page (and scroll there even
+ *    when you're starting from another route)
+ * Add "/team" and "/events" here once those pages are built.
+ */
 const NAV_LINKS = [
-  { label: "About", href: "#about" },
-  { label: "Menu", href: "#menu" },
-  { label: "Reviews", href: "#reviews" },
-  { label: "Contact", href: "#contact" },
+  { label: "Menu", href: "/menu" },
+  { label: "Team", href: "/team" },
+  { label: "Events", href: "/events" },
+  { label: "About", href: "/#about" },
+  { label: "Reviews", href: "/#reviews" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 export default function Navbar() {
@@ -15,32 +25,32 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-blush bg-white/90 backdrop-blur">
       <nav className="container-px flex h-16 items-center justify-between">
-        {/* Cursive text logo (Deep Navy) */}
-        <a
-          href="#top"
+        {/* Cursive text logo (Deep Navy) — home */}
+        <Link
+          href="/"
           className="flex flex-col leading-none"
-          aria-label="Harry's Coffee Shop — back to top"
+          aria-label="Harry's Coffee Shop — home"
         >
           <span className="heading-cursive text-3xl">Harry&apos;s</span>
           <span className="mt-3 text-[0.6rem] font-semibold uppercase leading-none tracking-[0.3em] text-navy/80">
             Coffee Shop
           </span>
-        </a>
+        </Link>
 
         {/* Desktop links */}
-        <div className="hidden items-center gap-8 md:flex">
+        <div className="hidden items-center gap-6 md:flex">
           {NAV_LINKS.map((link) => (
-            <a
+            <Link
               key={link.href}
               href={link.href}
               className="text-sm font-semibold text-navy transition hover:text-pink-600"
             >
               {link.label}
-            </a>
+            </Link>
           ))}
-          <a href="#contact" className="btn-primary">
+          <Link href="/#contact" className="btn-primary">
             Find Us
-          </a>
+          </Link>
         </div>
 
         {/* Mobile hamburger / close toggle */}
@@ -67,22 +77,22 @@ export default function Navbar() {
         <div id="mobile-menu" className="border-t border-blush bg-white md:hidden">
           <div className="container-px flex flex-col gap-1 py-4">
             {NAV_LINKS.map((link) => (
-              <a
+              <Link
                 key={link.href}
                 href={link.href}
                 onClick={() => setOpen(false)}
                 className="rounded-lg px-2 py-3 text-base font-semibold text-navy transition hover:bg-blush"
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
-            <a
-              href="#contact"
+            <Link
+              href="/#contact"
               onClick={() => setOpen(false)}
               className="btn-primary mt-2"
             >
               Find Us
-            </a>
+            </Link>
           </div>
         </div>
       )}

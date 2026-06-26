@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { business } from "@/lib/site-data";
 import DirectionsButton from "./DirectionsButton";
 
@@ -54,9 +55,9 @@ export default function Hero() {
           </p>
 
           <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <a href="#menu" className="btn-primary px-8 py-3.5 text-base">
+            <Link href="/menu" className="btn-primary px-8 py-3.5 text-base">
               View Today&apos;s Specials
-            </a>
+            </Link>
             <DirectionsButton className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-white bg-white/0 px-8 py-3.5 text-base font-semibold text-white transition hover:bg-white hover:text-navy">
               Get Directions
             </DirectionsButton>
